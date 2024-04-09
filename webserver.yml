@@ -1,0 +1,52 @@
+---
+- name: Installing apache/httpd webserver
+  hosts: 192.168.1.211
+  become: yes
+  vars:
+    index_html: "nginx with ansible yoooo!!!"
+    doc_root: "/usr/share/nginx/html"
+    pckg_name: httpd
+  tasks:
+    
+    - name: document root for apache
+      set_fact:
+        doc_root: "/var/www/html"
+      when: pckg_name == "httpd"
+
+    - name: document root for nginx
+      set_fact:
+        doc_root: "/usr/share/nginx/html"
+      when: pckg_name == "nginx"   
+    
+    - name: Installing epel-release
+      yum:
+        name: epel-release
+        state: present
+      when: pckg_name == "nginx"  
+    
+    - name: Installing a package
+      yum: 
+        name: "{{ pckg_name }}"
+        state: present      
+    
+    - name: Start and enable a service
+      service:
+        name: "{{ pckg_name }}"
+        state: started
+        enabled: true
+    
+    - name: "Add http to firewall"
+      firewalld:
+        service: http
+        permanent: true
+        immediate: true
+        state: enabled
+    
+    - name: Add index.html
+      ansible.builtin.copy:
+        dest: "{{ doc_root }}/index.html"
+        content: "{{ index_html }}"
+        owner: ansi-user
+        group: root
+        mode: '777'
+
