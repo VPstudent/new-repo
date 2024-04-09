@@ -29,11 +29,11 @@
         name: "{{ pckg_name }}"
         state: present      
     
-    - name: Start and enable a service
-      service:
-        name: "{{ pckg_name }}"
-        state: started
-        enabled: true
+    #- name: Start and enable a service
+    #  service:
+    #   name: "{{ pckg_name }}"
+    #    state: started
+    #    enabled: true
     
     - name: "Add http to firewall"
       firewalld:
