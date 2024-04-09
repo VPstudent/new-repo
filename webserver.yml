@@ -8,10 +8,10 @@
     pckg_name: httpd
   tasks:
     
-    - name: document root for apache
-      set_fact:
-        doc_root: "/var/www/html"
-      when: pckg_name == "httpd"
+    #- name: document root for apache
+    #  set_fact:
+    #    doc_root: "/var/www/html"
+    #  when: pckg_name == "httpd"
 
     - name: document root for nginx
       set_fact:
